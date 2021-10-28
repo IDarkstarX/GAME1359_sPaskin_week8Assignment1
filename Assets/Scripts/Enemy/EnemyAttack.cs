@@ -44,6 +44,20 @@ public class EnemyAttack : MonoBehaviour
 
     void Update ()
     {
+
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        float shortestDist = float.MaxValue;
+        for (int i = 0; i < players.Length; i++)
+        {
+            float dist = Vector3.Distance(this.transform.position, players[i].transform.position);
+            if (dist < shortestDist)
+            {
+                player = players[i];
+                playerHealth = player.GetComponent<PlayerHealth>();
+                shortestDist = dist;
+            }
+        }
+
         timer += Time.deltaTime;
 
         if(timer >= timeBetweenAttacks && playerInRange && enemyHealth.currentHealth > 0)
