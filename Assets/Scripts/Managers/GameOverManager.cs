@@ -14,6 +14,9 @@ public class GameOverManager : MonoBehaviour
     bool p1Dead = false;
     bool p2Dead = false;
 
+    [SerializeField]
+    GameObject[] baddieMovers;
+
     void Awake()
     {
         anim = GetComponent<Animator>();
@@ -22,34 +25,43 @@ public class GameOverManager : MonoBehaviour
 
     void Update()
     {
-        /*
-        for (int i = 0; i < playerHealth.Length; i++) {
-            Debug.Log("Checking if players are alive...");
-            if (playerHealth[i].currentHealth < 0)
-            {
-                Debug.Log("A player has died! D:");
-                deadPlayerCount++;
-                return;
-            }
-        }
-        */
+        baddieMovers = GameObject.FindGameObjectsWithTag("baddie");
+        
+        for (int i = 0; i < baddieMovers.Length; i++) {
 
-        if(playerHealth[0].currentHealth < 0 && !p1Dead)
+            baddieMovers[i].GetComponent<EnemyMovement>();
+        }
+
+        if (playerHealth[0].currentHealth <= 0 && !p1Dead)
         {
             deadPlayerCount++;
             p1Dead = true;
+
+            for (int i = 0; i < baddieMovers.Length; i++)
+            {
+
+                baddieMovers[i].GetComponent<EnemyMovement>().players.Remove(GameObject.Find("Player 1"));
+            }
+
         }
-        if (playerHealth[1].currentHealth < 0 && !p2Dead)
+        if (playerHealth[1].currentHealth <= 0 && !p2Dead)
         {
             deadPlayerCount++;
             p2Dead = true;
+
+            for (int i = 0; i < baddieMovers.Length; i++)
+            {
+
+                baddieMovers[i].GetComponent<EnemyMovement>().players.Remove(GameObject.Find("Player 2"));
+            }
+
         }
 
         if (deadPlayerCount >= alivePlayers)
         {
             Debug.Log("Test");
-            restartTimer += Time.deltaTime;
             anim.SetTrigger("GameOver");
+            restartTimer += Time.deltaTime;
         }
 
         if (restartTimer >= restartDelay)

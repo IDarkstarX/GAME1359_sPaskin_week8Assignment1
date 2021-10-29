@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - playerNumber
+  - baddie
   layers:
   - Default
   - TransparentFX

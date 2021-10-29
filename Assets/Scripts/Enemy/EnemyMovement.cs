@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -9,8 +10,11 @@ public class EnemyMovement : MonoBehaviour
     UnityEngine.AI.NavMeshAgent nav;
 
 
+    public List<GameObject> players = new List<GameObject>();
+
     void Awake ()
     {
+        players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         target = GameObject.FindGameObjectWithTag ("Player").transform;
         playerHealth = target.GetComponent <PlayerHealth> ();
         enemyHealth = GetComponent <EnemyHealth> ();
@@ -20,9 +24,9 @@ public class EnemyMovement : MonoBehaviour
 
     void Update ()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        
         float shortestDist = float.MaxValue;
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Count; i++)
         {
             float dist = Vector3.Distance(this.transform.position, players[i].transform.position);
             if (dist < shortestDist)
